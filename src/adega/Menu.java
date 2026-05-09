@@ -45,7 +45,13 @@ public class Menu {
 
             switch (opcao) {
                 case 1: cadastrar(); break;
-                case 2: bebidaController.listarTodas(); break;
+                case 2:
+                    try {
+                        bebidaController.listarTodas();
+                    } catch (RuntimeException e) {
+                        System.out.println(Cores.VERMELHO + "\n" + e.getMessage() + Cores.RESET);
+                    }
+                    break;
                 case 3: buscarPorCodigo(); break;
                 case 4: atualizar(); break;
                 case 5: deletar(); break;
@@ -59,87 +65,107 @@ public class Menu {
     }
 
     public static void cadastrar() {
-        System.out.println("\nCategoria (1-Cerveja / 2-Destilado): ");
-        int categoria = leia.nextInt();
+        try {
+            System.out.println("\nCategoria (1-Cerveja / 2-Destilado): ");
+            int categoria = leia.nextInt();
 
-        System.out.println("Nome: ");
-        String nome = leia.next();
+            System.out.println("Nome: ");
+            String nome = leia.next();
 
-        System.out.println("Marca: ");
-        String marca = leia.next();
+            System.out.println("Marca: ");
+            String marca = leia.next();
 
-        System.out.println("Preco (R$): ");
-        float preco = leia.nextFloat();
+            System.out.println("Preco (R$): ");
+            float preco = leia.nextFloat();
 
-        System.out.println("Quantidade em estoque: ");
-        int quantidade = leia.nextInt();
+            System.out.println("Quantidade em estoque: ");
+            int quantidade = leia.nextInt();
 
-        if (categoria == 1) {
-            System.out.println("Tipo (Ex: Lager, IPA, Pilsen): ");
-            String tipo = leia.next();
-            bebidaController.cadastrar(
-                new Cerveja(bebidaController.gerarCodigo(), nome, marca, preco, quantidade, tipo)
-            );
-        } else {
-            System.out.println("Teor Alcoolico (%): ");
-            float teor = leia.nextFloat();
-            bebidaController.cadastrar(
-                new Destilado(bebidaController.gerarCodigo(), nome, marca, preco, quantidade, teor)
-            );
+            if (categoria == 1) {
+                System.out.println("Tipo (Ex: Lager, IPA, Pilsen): ");
+                String tipo = leia.next();
+                bebidaController.cadastrar(
+                    new Cerveja(bebidaController.gerarCodigo(), nome, marca, preco, quantidade, tipo)
+                );
+            } else {
+                System.out.println("Teor Alcoolico (%): ");
+                float teor = leia.nextFloat();
+                bebidaController.cadastrar(
+                    new Destilado(bebidaController.gerarCodigo(), nome, marca, preco, quantidade, teor)
+                );
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(Cores.VERMELHO + "\nErro: " + e.getMessage() + Cores.RESET);
         }
     }
 
     public static void buscarPorCodigo() {
-        System.out.println("\nCodigo da Bebida: ");
-        int codigo = leia.nextInt();
-        bebidaController.procurarPorCodigo(codigo);
+        try {
+            System.out.println("\nCodigo da Bebida: ");
+            int codigo = leia.nextInt();
+            bebidaController.procurarPorCodigo(codigo);
+        } catch (RuntimeException e) {
+            System.out.println(Cores.VERMELHO + "\n" + e.getMessage() + Cores.RESET);
+        }
     }
 
     public static void atualizar() {
-        System.out.println("\nCodigo da Bebida a atualizar: ");
-        int codigo = leia.nextInt();
+        try {
+            System.out.println("\nCodigo da Bebida a atualizar: ");
+            int codigo = leia.nextInt();
 
-        System.out.println("Categoria (1-Cerveja / 2-Destilado): ");
-        int categoria = leia.nextInt();
+            System.out.println("Categoria (1-Cerveja / 2-Destilado): ");
+            int categoria = leia.nextInt();
 
-        System.out.println("Nome: ");
-        String nome = leia.next();
+            System.out.println("Nome: ");
+            String nome = leia.next();
 
-        System.out.println("Marca: ");
-        String marca = leia.next();
+            System.out.println("Marca: ");
+            String marca = leia.next();
 
-        System.out.println("Preco (R$): ");
-        float preco = leia.nextFloat();
+            System.out.println("Preco (R$): ");
+            float preco = leia.nextFloat();
 
-        System.out.println("Quantidade em estoque: ");
-        int quantidade = leia.nextInt();
+            System.out.println("Quantidade em estoque: ");
+            int quantidade = leia.nextInt();
 
-        if (categoria == 1) {
-            System.out.println("Tipo (Ex: Lager, IPA, Pilsen): ");
-            String tipo = leia.next();
-            bebidaController.atualizar(
-                new Cerveja(codigo, nome, marca, preco, quantidade, tipo)
-            );
-        } else {
-            System.out.println("Teor Alcoolico (%): ");
-            float teor = leia.nextFloat();
-            bebidaController.atualizar(
-                new Destilado(codigo, nome, marca, preco, quantidade, teor)
-            );
+            if (categoria == 1) {
+                System.out.println("Tipo (Ex: Lager, IPA, Pilsen): ");
+                String tipo = leia.next();
+                bebidaController.atualizar(
+                    new Cerveja(codigo, nome, marca, preco, quantidade, tipo)
+                );
+            } else {
+                System.out.println("Teor Alcoolico (%): ");
+                float teor = leia.nextFloat();
+                bebidaController.atualizar(
+                    new Destilado(codigo, nome, marca, preco, quantidade, teor)
+                );
+            }
+        } catch (RuntimeException e) {
+            System.out.println(Cores.VERMELHO + "\n" + e.getMessage() + Cores.RESET);
         }
     }
 
     public static void deletar() {
-        System.out.println("\nCodigo da Bebida a deletar: ");
-        int codigo = leia.nextInt();
-        bebidaController.deletar(codigo);
+        try {
+            System.out.println("\nCodigo da Bebida a deletar: ");
+            int codigo = leia.nextInt();
+            bebidaController.deletar(codigo);
+        } catch (RuntimeException e) {
+            System.out.println(Cores.VERMELHO + "\n" + e.getMessage() + Cores.RESET);
+        }
     }
 
     public static void fazerPedido() {
-        System.out.println("\nCodigo da Bebida: ");
-        int codigo = leia.nextInt();
-        System.out.println("Quantidade desejada: ");
-        int quantidade = leia.nextInt();
-        bebidaController.fazerPedido(codigo, quantidade);
+        try {
+            System.out.println("\nCodigo da Bebida: ");
+            int codigo = leia.nextInt();
+            System.out.println("Quantidade desejada: ");
+            int quantidade = leia.nextInt();
+            bebidaController.fazerPedido(codigo, quantidade);
+        } catch (RuntimeException e) {
+            System.out.println(Cores.VERMELHO + "\n" + e.getMessage() + Cores.RESET);
+        }
     }
 }

@@ -10,11 +10,10 @@ public class BebidaController {
 
     public void listarTodas() {
         if (listaBebidas.isEmpty()) {
-            System.out.println(Cores.VERMELHO + "\nNenhuma bebida cadastrada!" + Cores.RESET);
-        } else {
-            for (Bebida bebida : listaBebidas) {
-                bebida.visualizar();
-            }
+            throw new RuntimeException("Nenhuma bebida cadastrada!");
+        }
+        for (Bebida bebida : listaBebidas) {
+            bebida.visualizar();
         }
     }
 
@@ -32,12 +31,17 @@ public class BebidaController {
         if (bebida != null) {
             bebida.visualizar();
         } else {
-            System.out.println(Cores.VERMELHO +
-                "\nBebida com código " + codigo + " não encontrada!" + Cores.RESET);
+            throw new RuntimeException("Bebida com código " + codigo + " não encontrada!");
         }
     }
 
     public void cadastrar(Bebida bebida) {
+        if (bebida.getPreco() < 0) {
+            throw new IllegalArgumentException("Preço não pode ser negativo!");
+        }
+        if (bebida.getQuantidade() < 0) {
+            throw new IllegalArgumentException("Quantidade não pode ser negativa!");
+        }
         listaBebidas.add(bebida);
         System.out.println(Cores.VERDE +
             "\nBebida cadastrada com sucesso!" + Cores.RESET);
@@ -50,7 +54,7 @@ public class BebidaController {
             System.out.println(Cores.VERDE +
                 "\nBebida atualizada com sucesso!" + Cores.RESET);
         } else {
-            System.out.println(Cores.VERMELHO + "\nBebida não encontrada!" + Cores.RESET);
+            throw new RuntimeException("Bebida não encontrada!");
         }
     }
 
@@ -61,27 +65,27 @@ public class BebidaController {
             System.out.println(Cores.VERDE +
                 "\nBebida deletada com sucesso!" + Cores.RESET);
         } else {
-            System.out.println(Cores.VERMELHO + "\nBebida não encontrada!" + Cores.RESET);
+            throw new RuntimeException("Bebida não encontrada!");
         }
     }
 
     public void fazerPedido(int codigo, int quantidade) {
         Bebida bebida = buscarNaCollection(codigo);
-        if (bebida != null) {
-            if (bebida.getQuantidade() < quantidade) {
-                System.out.println(Cores.VERMELHO +
-                    "\nEstoque insuficiente! Disponível: " + bebida.getQuantidade() + Cores.RESET);
-            } else {
-                bebida.setQuantidade(bebida.getQuantidade() - quantidade);
-                float total = bebida.getPreco() * quantidade;
-                System.out.println(Cores.VERDE + "\nPedido realizado com sucesso!" + Cores.RESET);
-                System.out.println("Bebida: "    + bebida.getNome());
-                System.out.println("Quantidade: " + quantidade);
-                System.out.printf("Total: R$ %,.2f%n", total);
-            }
-        } else {
-            System.out.println(Cores.VERMELHO + "\nBebida não encontrada!" + Cores.RESET);
+        if (bebida == null) {
+            throw new RuntimeException("Bebida não encontrada!");
         }
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("Quantidade deve ser maior que zero!");
+        }
+        if (bebida.getQuantidade() < quantidade) {
+            throw new RuntimeException("Estoque insuficiente! Disponível: " + bebida.getQuantidade());
+        }
+        bebida.setQuantidade(bebida.getQuantidade() - quantidade);
+        float total = bebida.getPreco() * quantidade;
+        System.out.println(Cores.VERDE + "\nPedido realizado com sucesso!" + Cores.RESET);
+        System.out.println("Bebida: "     + bebida.getNome());
+        System.out.println("Quantidade: " + quantidade);
+        System.out.printf("Total: R$ %,.2f%n", total);
     }
 
     public int gerarCodigo() {
